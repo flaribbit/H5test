@@ -1,0 +1,70 @@
+<canvas id="gc" width="640" height="480"></canvas>
+<script src="js/base.js"></script>
+<script>
+var frame;
+var imgPeople1;
+var player={
+	x:0,
+	y:0,
+	dir:2,//角色朝向
+	targetx:0,
+	targety:0,
+	speed:2,//移动速度
+	standAni:false,//原地踏步动画
+	moveAni:true,//行走动画
+	moving:false,//是否正在移动
+	draw:function(){
+		//跟随鼠标移动
+		var dd=dist(this.x,this.y,this.targetx,this.targety);//计算距离
+		var deltax=this.targetx-this.x;
+		var deltay=this.targety-this.y;
+		if(dd>this.speed){
+			this.moving=true;
+			this.dir=dirq(deltax,deltay);//计算主角朝向
+			this.x+=deltax/dd*this.speed;
+			this.y+=deltay/dd*this.speed;
+		}else{
+			this.moving=false;
+			this.x=this.targetx;
+			this.y=this.targety;
+		}
+		if(this.moving&&this.moveAni||this.standAni){
+			var tmp=Math.floor(frame/12)%4;
+			if(tmp==3)tmp=1;
+			ctx.drawImage(imgPeople1,tmp*32,this.dir*16-31,32,32,this.x,this.y,32,32);
+		}else{
+			ctx.drawImage(imgPeople1,32,this.dir*16-32,32,32,this.x,this.y,32,32);
+		}
+	}
+};
+
+window.onload=function() {
+	frame=0;
+	canv=document.getElementById("gc");
+	ctx=canv.getContext("2d");
+	
+	imgPeople1=new Image();
+	imgPeople1.src="img/People1.png"//载入玩家贴图
+	
+	canv.onclick=function(evt){//设置目的地
+		player.targetx=evt.offsetX-16;
+		player.targety=evt.offsetY-28;
+	}
+	//document.addEventListener("keydown",keyDown);
+	setInterval(main,1000/60);//60fps
+}
+//在这里初始化
+function main() {
+	//在这里放置游戏代码
+	frame++;
+	ctx.clearRect(0,0,gc.width,gc.height);//清屏
+	ctx.fillText("frame "+frame,0,10);
+	player.draw();
+}
+//function keyDown(evt) {
+//	//在这里处理按键操作
+//	switch(evt.keyCode) {
+//		
+//	}
+//}
+</script>
