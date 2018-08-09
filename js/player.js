@@ -1,7 +1,5 @@
 //玩家类
 
-const MAX_WIDTH=10;
-
 function Player(){
 	this.id=0;
 	this.name="我是npc";
@@ -14,8 +12,7 @@ function Player(){
 	this.moving=false;//正在移动
 	this.dir=2;//朝向
 	this.target={
-		x:0,
-		y:0
+		x:0,y:0
 	};
 	
 	this.aniStand=false;//踏步动画
@@ -24,9 +21,8 @@ function Player(){
 	this.showName=false;//显示名字
 	
 	this.bubble={
-		msg:[],
-		time:0
-	}
+		msg:[],time:0
+	};
 }
 
 Player.prototype.distanceTo=function(obj){
@@ -111,7 +107,7 @@ Player.prototype.say=function(raw){
 	var p=0,q,tmp;
 	this.bubble.msg.length=0;
 	while(1){
-		for(q=p+8;ctx.measureText(tmp=raw.substring(p,q+1)).width<120&&q<raw.length;q++){
+		for(q=p+8;ctx.measureText(tmp=raw.substring(p,q+1)).width<110&&q<raw.length;q++){
 			//console.log(q);
 		}
 		if(tmp.length==0)break;

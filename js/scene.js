@@ -1,6 +1,7 @@
 var time,frameCount,framePerSec;
 var imgPeople1;
 var player;
+var farmland;
 
 window.onload=function() {
 	//初始化主要变量
@@ -20,6 +21,9 @@ window.onload=function() {
 	
 	player=new Player();
 	
+	farmland=new Farmland();
+	farmland.init();
+	
 	//设置目的地
 	canv.onclick=function(evt){
 		player.setTarget(evt.offsetX-16,evt.offsetY-28);
@@ -33,6 +37,8 @@ function main(){
 	//清屏
 	ctx.clearRect(0,0,gc.width,gc.height);
 	ctx.strokeRect(0,0,gc.width,gc.height);
+	
+	farmland.drawtest();
 	
 	player.move();
 	player.draw();
