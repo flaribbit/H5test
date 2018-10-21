@@ -3,7 +3,8 @@
 function Player(){
 	this.id=0;
 	this.name="我是npc";
-	this.img=imgPeople1;//贴图
+	//this.img=imgPeople1;//贴图
+	this.img=imgmole01;
 	this.x=0;
 	this.y=0;
 	this.vx=0;
@@ -17,7 +18,6 @@ function Player(){
 	
 	this.aniStand=false;//踏步动画
 	this.aniMove=true;//行走动画
-	
 	this.showName=false;//显示名字
 	
 	this.bubble={
@@ -40,13 +40,17 @@ Player.prototype.setTarget=function(x,y){
 	this.target.y=y;
 	this.vx=dx/dd*this.speed;
 	this.vy=dy/dd*this.speed;
-	if(dx>dy){
+	/*if(dx>dy){
 		this.dir=dx>-dy?6:8;
 	}else{
 		this.dir=dx>-dy?2:4;
+	}*/
+	if(dx>0){
+		this.dir=dy>0?1:3;
+	}else{
+		this.dir=dy>0?0:2;
 	}
 }
-
 Player.prototype.move=function(){
 	if(this.distanceTo(this.target)>this.speed){
 		this.moving=true;
@@ -61,15 +65,19 @@ Player.prototype.move=function(){
 
 Player.prototype.draw=function(){
 	if(this.showName){
-		var pos=this.x+16-ctx.measureText(this.name).width/2;
-		ctx.fillText(this.name,pos<<0,this.y+48);
+		ctx.fillText(this.name,(this.x+16-ctx.measureText(this.name).width/2)<<0,this.y+48);
 	}
 	if(this.moving&&this.aniMove||this.aniStand){
-		var tmp=Math.floor(frameCount/12)%4;
-		if(tmp==3)tmp=1;
-		ctx.drawImage(this.img,tmp*32,this.dir*16-31,32,32,this.x<<0,this.y<<0,32,32);
+		//旧版本使用4帧动画
+		//var tmp=Math.floor(frameCount/12)%4;
+		//if(tmp==3)tmp=1;
+		//ctx.drawImage(this.img,tmp*32,this.dir*16-31,32,32,this.x<<0,this.y<<0,32,32);
+		//新版本使用14帧动画
+		var tmp=Math.floor(frameCount/4)%14+1;
+		ctx.drawImage(this.img,tmp*63,this.dir*84,63,84,this.x-32<<0,this.y-68<<0,63,84);
 	}else{
-		ctx.drawImage(this.img,32,this.dir*16-32,32,32,this.x<<0,this.y<<0,32,32);
+		//ctx.drawImage(this.img,32,this.dir*16-32,32,32,this.x<<0,this.y<<0,32,32);
+		ctx.drawImage(this.img,0,this.dir*84,63,84,this.x-32<<0,this.y-68<<0,63,84);
 	}
 	if(this.bubble.time>0){
 		this._drawMessage(this.bubble.msg);
