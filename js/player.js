@@ -89,7 +89,7 @@ Player.prototype._drawMessage=function(msg){
 	var x,y,w,h;
 	
 	x=this.x+16<<0;
-	y=this.y<<0;
+	y=this.y-60<<0;
 	w=msg.length>1?120:ctx.measureText(msg).width;
 	h=12*msg.length;
 	
@@ -106,9 +106,13 @@ Player.prototype._drawMessage=function(msg){
 	ctx.lineTo(x+10,y-5);
 	ctx.closePath();
 	ctx.stroke();
+	ctx.fillStyle="white";
+	ctx.fill();
+	ctx.fillStyle="black";
 	for(var i=0;i<msg.length;i++){
 		ctx.fillText(msg[i],x+5,y-h+12*i);
 	}
+	
 }
 
 Player.prototype.say=function(raw){
