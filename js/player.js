@@ -3,7 +3,6 @@
 function Player(){
 	this.id=0;
 	this.name="我是npc";
-	//this.img=imgPeople1;//贴图
 	this.img=imgmole01;
 	this.x=0;
 	this.y=0;
