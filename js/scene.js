@@ -18,10 +18,12 @@ window.onload=function() {
 	time=new Date().getTime();
 	
 	//载入玩家贴图
-	imgPeople1=new Image();
-	imgPeople1.src="img/People1.png";
+	//imgPeople1=new Image();
+	//imgPeople1.src="img/People1.png";
 	imgmole01=new Image();
 	imgmole01.src="img/mole01.png";
+	imgmole02=new Image();
+	imgmole02.src="img/mole02.png";
 	//创建玩家
 	player=new Player();
 	//创建农田

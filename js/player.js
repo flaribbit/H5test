@@ -87,12 +87,13 @@ Player.prototype.draw=function(){
 
 Player.prototype._drawMessage=function(msg){
 	var x,y,w,h;
-	
+	//气泡绘制坐标偏移
 	x=this.x+16<<0;
 	y=this.y-60<<0;
+	//处理多行文本
 	w=msg.length>1?120:ctx.measureText(msg).width;
 	h=12*msg.length;
-	
+	//开始绘制气泡
 	ctx.beginPath()
 	ctx.moveTo(x,y);
 	ctx.lineTo(x+5,y-5);
@@ -108,16 +109,19 @@ Player.prototype._drawMessage=function(msg){
 	ctx.stroke();
 	ctx.fillStyle="white";
 	ctx.fill();
+	//绘制文本
 	ctx.fillStyle="black";
 	for(var i=0;i<msg.length;i++){
 		ctx.fillText(msg[i],x+5,y-h+12*i);
 	}
-	
 }
 
 Player.prototype.say=function(raw){
 	var p=0,q,tmp;
 	this.bubble.msg.length=0;
+	if(raw=='乐乐'){
+		this.img=imgmole02;
+	}
 	while(1){
 		for(q=p+8;ctx.measureText(tmp=raw.substring(p,q+1)).width<110&&q<raw.length;q++){
 			//console.log(q);
