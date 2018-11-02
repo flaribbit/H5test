@@ -1,4 +1,9 @@
 //土地类
+
+	//创建农田
+	//farmland=new Farmland();
+	//farmland.init();
+
 const FarmlandH=4;
 const FarmlandW=5;
 

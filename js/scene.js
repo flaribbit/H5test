@@ -1,8 +1,8 @@
-var time,frameCount,framePerSec;
-var imgPeople1;
-var player;
+var time,frameCount,framePerSec;//计数器
+var imgmole01,imgmole02,imgscene;
+var player;//玩家
+var players=[];//其他玩家
 var farmland;
-var players=[];
 var ws;
 
 window.onload=function() {
@@ -24,40 +24,83 @@ window.onload=function() {
 	imgmole01.src="img/mole01.png";
 	imgmole02=new Image();
 	imgmole02.src="img/mole02.png";
+	imgscene=new Image();
+	imgscene.src="img/scene/map01.png";
+	
 	//创建玩家
 	player=new Player();
-	//创建农田
-	farmland=new Farmland();
-	farmland.init();
+	player.id=new Date().getTime();
 	
 	//创建网络连接
-	ws=new WebSocket('ws://localhost:8080/','echo-protocol');
-	if(!ws){
-		alert("服务器连接失败！");
+	//ws=new WebSocket('ws://127.0.0.1:3000');
+	ws=new WebSocket('wss://flyz-mole-server.herokuapp.com');
+	ws.onopen=function(e){
+		ws.send('{"action":"setID","data":'+player.id+'}');
+		ws.send('{"action":"player.getInfo"}');
+	}
+	ws.onmessage=function(e){
+		var msg;
+		console.log(e);
+		try{
+			msg=JSON.parse(e.data);
+			if(msg.action=='player.new'){
+				//创建新的玩家
+				var p=new Player();
+				p.id=msg.id;
+				p.target.x=p.x=msg.data[0];
+				p.target.y=p.y=msg.data[1];
+				players.push(p);
+			}else if(msg.action=='player.getInfo'){
+				//发送自己的信息 message.data是请求者id
+				ws.send('{"action":"player.myInfo","id":'+msg.data+',"data":['+player.x+','+player.y+']}');
+			}else if(msg.action=='player.setTarget'){
+				//其他玩家移动
+				for(i=0;i<players.length;i++){
+					if(players[i].id==msg.id){
+						players[i].setTarget(msg.data[0],msg.data[1]);
+						break;
+					}
+				}
+			}else if(msg.action=='player.leave'){
+				//其他玩家离开
+				for(i=0;players.length;i++){
+					if(players[i].id==msg.id){
+						players.splice(i,1);
+						break;
+					}
+				}
+			}
+		}catch(error){
+			console.log(error);
+		}
 	}
 	
 	//设置目的地
 	canv.onclick=function(evt){
-		//ws.send({move:{x:evt.offsetX-16,y:evt.offsetY-28}});
 		//新版本使用绘制偏移
-		//player.setTarget(evt.offsetX-16,evt.offsetY-28);
 		player.setTarget(evt.offsetX,evt.offsetY);
-		ws.send(JSON.stringify(player));
-		//console.log(player);
+		ws.send('{"action":"player.setTarget","id":'+player.id+',"data":['+evt.offsetX+','+evt.offsetY+']}');
+		//ws.send(JSON.stringify(player));
 	}
 	//document.addEventListener("keydown",keyDown);
 	setInterval(main,17);//60fps
 }
 //在这里初始化
 function main(){
-	//清屏
-	ctx.clearRect(0,0,gc.width,gc.height);
-	ctx.strokeRect(0,0,gc.width,gc.height);
+	//清除画布
+	//ctx.clearRect(0,0,gc.width,gc.height);
+	//ctx.strokeRect(0,0,gc.width,gc.height);
+	//绘制背景
+	ctx.drawImage(imgscene,0,0);
 	
-	farmland.drawtest();
+	//farmland.drawtest();
 	
 	player.move();
 	player.draw();
+	for(i=0;i<players.length;i++){
+		players[i].move();
+		players[i].draw();
+	}
 	
 	displayFPS();
 }

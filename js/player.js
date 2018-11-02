@@ -1,23 +1,23 @@
 //玩家类
 
 function Player(){
-	this.id=0;
-	this.name="我是npc";
+	this.id=100;
+	this.name="小摩尔";
 	this.img=imgmole01;
-	this.x=0;
-	this.y=0;
+	this.x=100;
+	this.y=100;
 	this.vx=0;
 	this.vy=0;
 	this.speed=2;//移动速度
 	this.moving=false;//正在移动
 	this.dir=2;//朝向
 	this.target={
-		x:0,y:0
+		x:100,y:100
 	};
 	
 	this.aniStand=false;//踏步动画
 	this.aniMove=true;//行走动画
-	this.showName=false;//显示名字
+	this.showName=true;//显示名字
 	
 	this.bubble={
 		msg:[],time:0
@@ -64,7 +64,7 @@ Player.prototype.move=function(){
 
 Player.prototype.draw=function(){
 	if(this.showName){
-		ctx.fillText(this.name,(this.x+16-ctx.measureText(this.name).width/2)<<0,this.y+48);
+		ctx.fillText(this.name,(this.x-ctx.measureText(this.name).width/2)<<0,this.y+24);
 	}
 	if(this.moving&&this.aniMove||this.aniStand){
 		//旧版本使用4帧动画
@@ -93,6 +93,7 @@ Player.prototype._drawMessage=function(msg){
 	w=msg.length>1?120:ctx.measureText(msg).width;
 	h=12*msg.length;
 	//开始绘制气泡
+	ctx.fillStyle="white";
 	ctx.beginPath()
 	ctx.moveTo(x,y);
 	ctx.lineTo(x+5,y-5);
@@ -106,7 +107,6 @@ Player.prototype._drawMessage=function(msg){
 	ctx.lineTo(x+10,y-5);
 	ctx.closePath();
 	ctx.stroke();
-	ctx.fillStyle="white";
 	ctx.fill();
 	//绘制文本
 	ctx.fillStyle="black";
