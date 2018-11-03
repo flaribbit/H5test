@@ -69,6 +69,14 @@ window.onload=function() {
 						break;
 					}
 				}
+			}else if(msg.action=='player.say'){
+				//显示消息
+				for(i=0;players.length;i++){
+					if(players[i].id==msg.id){
+						players[i].say(msg.data);
+						break;
+					}
+				}
 			}
 		}catch(error){
 			console.log(error);
