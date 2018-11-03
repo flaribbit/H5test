@@ -10,7 +10,7 @@ function Player(){
 	this.vy=0;
 	this.speed=2;//移动速度
 	this.moving=false;//正在移动
-	this.dir=2;//朝向
+	this.dir=3;//朝向
 	this.target={
 		x:100,y:100
 	};
